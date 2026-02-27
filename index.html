@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ифтарға шақыру</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+  scroll-behavior: smooth;
+  background: linear-gradient(to bottom, #fff0f5, #ffe4ec);
+}
+
+section {
+  padding: 25px 15px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.4em;
+  color: #d63384;
+  margin-bottom: 5px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeIn 1s forwards;
+}
+
+p {
+  font-size: 1.05em;
+  margin: 3px 0;
+  line-height: 1.5em;
+}
+
+/* Кнопки */
+.btn {
+  margin: 8px 5px;
+  padding: 10px 22px;
+  font-size: 1em;
+  color: #fff;
+  background: #d63384;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s, box-shadow 0.3s;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 1s forwards;
+  animation-delay: 0.5s;
+}
+
+.btn:hover {
+  background: #b52b6c;
+  box-shadow: 0 0 15px rgba(214,51,132,0.6);
+}
+
+/* Карточки девушек */
+.cards-wrapper {
+  max-width: 900px;
+  margin: 15px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 15px;
+  justify-items: center;
+  grid-auto-flow: dense;
+}
+
+.card {
+  background: rgba(255,255,255,0.9);
+  padding: 12px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  transition: transform 0.6s, box-shadow 0.6s, opacity 1.2s;
+  opacity: 0;
+  transform: translateY(20px);
+  cursor: pointer;
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(214,51,132,0.5);
+}
+
+.card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  transition: box-shadow 0.3s;
+}
+
+.card img:hover {
+  box-shadow: 0 0 15px rgba(214,51,132,0.5);
+}
+
+.card h3 {
+  font-size: 0.9em;
+  margin: 0;
+  color: #d63384;
+}
+
+/* Текст блок */
+.text-block {
+  max-width: 650px;
+  background: rgba(255,255,255,0.9);
+  padding: 18px;
+  border-radius: 18px;
+  margin: 15px auto;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.4s ease, transform 1.4s ease;
+}
+
+.text-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Подсказка */
+.cards-wrapper + p {
+  color: #d63384;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Стрелка */
+.scroll-down {
+  width: 28px;
+  height: 28px;
+  margin: 12px auto 0;
+  border-left: 3px solid #d63384;
+  border-bottom: 3px solid #d63384;
+  transform: rotate(-45deg);
+  animation: bounceDown 1.2s infinite, blink 2s infinite;
+  cursor: pointer;
+}
+
+@keyframes bounceDown {
+  0% { transform: rotate(-45deg) translateY(0); }
+  50% { transform: rotate(-45deg) translateY(8px); }
+  100% { transform: rotate(-45deg) translateY(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Footer */
+footer {
+  padding: 15px;
+  font-size: 1.2em;
+  color: #d63384;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* Анимация fadeIn */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Модальное окно */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff0f5;
+  padding: 20px;
+  border-radius: 18px;
+  text-align: center;
+  max-width: 300px;
+  position: relative;
+}
+
+.modal-content img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.modal-content h2 {
+  margin: 8px 0;
+  color: #d63384;
+}
+
+.modal-content p {
+  color: #555;
+  font-size: 0.95em;
+}
+
+/* Закрыть */
+.close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #d63384;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Первый экран -->
+<section id="intro">
+  <h1>Ифтарға шақыру 🌸</h1>
+  <p><strong>Күні:</strong> 5 наурыз, 17:00</p>
+  <p><strong>Мекен-жай:</strong> Ул.Каллаур Акима 43а</p>
+  <button class="btn" onclick="playMusic()">Музыканы қосу 🎵</button>
+  <div class="scroll-down" onclick="scrollToSection('girls')"></div>
+</section>
+
+<!-- Карточки девушек -->
+<section id="girls">
+  <p>Карточканы басыңыз 🌸</p>
+  <div class="cards-wrapper">
+    <div class="card" data-name="Жибек" data-img="girl1.jpg" data-text="Әр күнің қуаныш пен күлкіге толы болсын!"><img src="girl1.jpg"><h3>Жибек</h3></div>
+    <div class="card" data-name="Мөлдір" data-img="girl2.jpg" data-text="Әр сәт ерекше болсын!"><img src="girl2.jpg"><h3>Мөлдір</h3></div>
+    <div class="card" data-name="Жанар" data-img="girl3.jpg" data-text="Шабыт пен жарқын эмоция тілейміз!"><img src="girl3.jpg"><h3>Жанар</h3></div>
+    <div class="card" data-name="Сымбат" data-img="girl4.jpg" data-text="Күлкің ешқашан жоғалмасын!"><img src="girl4.jpg"><h3>Сымбат</h3></div>
+    <div class="card" data-name="Гүлдана" data-img="girl5.jpg" data-text="Махаббат, жылылық пен нағыз достық тілейміз!"><img src="girl5.jpg"><h3>Гүлдана</h3></div>
+    <div class="card" data-name="Нуршуақ" data-img="girl6.jpg" data-text="Барлық армандарың оңай және тез орындалсын!"><img src="girl6.jpg"><h3>Нуршуақ</h3></div>
+    <!-- пустая карточка-заполнитель для выравнивания -->
+    <div style="width:110px;height:0;"></div>
+    <div class="card" data-name="Жаңыл" data-img="girl7.jpg" data-text="Көңілді, сәттілік пен қуанышты кездесулер тілейміз!"><img src="girl7.jpg"><h3>Жаңыл</h3></div>
+  </div>
+  <div class="scroll-down" onclick="scrollToSection('text')"></div>
+</section>
+
+<!-- Текст -->
+<section id="text">
+  <div class="text-block">
+    <p><strong>6 наурыз күні ерекше кештің бір бөлігі болуға дайынсыз ба?</strong></p>
+    <p>Бұл жай ғана ауызашар емес — сіздер үшін арнайы ұйымдастырылған жүрекке жылу сыйлайтын рухани кездесу.</p>
+    <p>Сәнді атмосфера, шынайы әңгіме, дәмді тағамдар мен ұмытылмас сәттер сіздерді күтеді.</p>
+    <p>Рамазанның нұры мен берекесін бірге сезіп, әдемі естеліктер қалдырайық! 🌙</p>
+  </div>
+  <div class="scroll-down" onclick="scrollToSection('map')"></div>
+</section>
+
+<!-- 2GIS -->
+<section id="map">
+  <a class="btn"
+     href="https://2gis.kz/taraz/geo/70030076288729894/71.356615,42.882193"
+     target="_blank">
+     Орналасқан жері 📍
+  </a>
+</section>
+
+<!-- Футер -->
+<footer>🎀 Жігіттерден жүрекпен</footer>
+
+<audio id="bg-music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Модальное окно -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" id="modal-close">&times;</span>
+    <img id="modal-img" src="">
+    <h2 id="modal-name"></h2>
+    <p id="modal-text"></p>
+  </div>
+</div>
+
+<script>
+// Музыка
+function playMusic() {
+  document.getElementById("bg-music").play();
+}
+
+// Плавный скролл
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+// Медленная анимация карточек
+const cards = document.querySelectorAll('.card');
+const textBlock = document.querySelector('.text-block');
+
+function revealOnScroll() {
+  const triggerBottom = window.innerHeight * 0.85;
+
+  cards.forEach((card, index) => {
+    const cardTop = card.getBoundingClientRect().top;
+    if(cardTop < triggerBottom){
+      setTimeout(() => { 
+        card.classList.add('visible'); 
+      }, index * 250);
+    }
+  });
+
+  const textTop = textBlock.getBoundingClientRect().top;
+  if(textTop < triggerBottom){
+    textBlock.classList.add('visible');
+  }
+}
+
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', revealOnScroll);
+
+// Модальное окно
+const modal = document.getElementById('modal');
+const modalImg = document.getElementById('modal-img');
+const modalName = document.getElementById('modal-name');
+const modalText = document.getElementById('modal-text');
+const modalClose = document.getElementById('modal-close');
+
+cards.forEach(card => {
+  card.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    modalImg.src = card.dataset.img;
+    modalName.textContent = card.dataset.name;
+    modalText.textContent = card.dataset.text;
+  });
+});
+
+modalClose.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+modal.addEventListener('click', (e) => {
+  if(e.target === modal) modal.style.display = 'none';
+});
+</script>
+
+</body>
+</html>
